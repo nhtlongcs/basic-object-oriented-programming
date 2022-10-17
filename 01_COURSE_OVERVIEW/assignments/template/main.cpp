@@ -30,9 +30,13 @@ public:
         int denominator = std::stoi(text.substr(pos + 1));
         return Fraction(numerator, denominator);
     }
-    static bool cmp(const Fraction &u, const Fraction &v)
+    static bool cmpSmaller(const Fraction &u, const Fraction &v)
     {
         return u.numerator * v.denominator < v.numerator * u.denominator;
+    }
+    static bool cmpGreater(const Fraction &u, const Fraction &v)
+    {
+        return u.numerator * v.denominator > v.numerator * u.denominator;
     }
 };
 void readInt(int &x)
@@ -48,9 +52,14 @@ void readFraction(Fraction &u)
     u = u.parse(text);
 }
 // Some compare functions
-bool compareInt(const int &a, const int &b)
+bool compareIntSmaller(const int &a, const int &b)
 {
     return (a < b);
+}
+// Some compare functions
+bool compareIntGreater(const int &a, const int &b)
+{
+    return (a > b);
 }
 // Some output functions
 void writeInt(int &x)
@@ -105,18 +114,24 @@ int main()
     int a[MAX_N];
     std::cout << "Please input your array: " << std::endl;
     readData(n, a, readInt);
-    sortArray(n, a, compareInt);
+    sortArray(n, a, compareIntSmaller);
     writeData(n, a, writeInt);
+    std::cout << std::endl;
+    sortArray(n, a, compareIntGreater);
+    writeData(n, a, writeInt);
+    std::cout << std::endl;
 
     // Example of Fraction array
-    std::cout << std::endl
-              << std::endl;
     std::cout << "Example of Fraction array" << std::endl;
     int m;
     Fraction b[MAX_N];
     std::cout << "Please input your array: " << std::endl;
     readData(m, b, readFraction);
-    sortArray(m, b, Fraction::cmp);
+    sortArray(m, b, Fraction::cmpSmaller);
     writeData(m, b, writeFraction);
+    std::cout << std::endl;
+    sortArray(m, b, Fraction::cmpGreater);
+    writeData(m, b, writeFraction);
+    std::cout << std::endl;
     return 0;
 }
