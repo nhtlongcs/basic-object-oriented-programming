@@ -1,8 +1,11 @@
 Generic makefile example for a C++ project
-If you need a small makefile introduction/reference you can take a look at my notes https://www.mauriciopoppe.com/notes/os/bin/make/
+If the folder only contains a single source file (or maybe one include file), you can compile it with the following command:
+```bash
+$ make
+```
+`$ sh new.sh` to create project structure following the template
 
-$ sh new.sh to create project structure following the template
-
+```bash
 . project
 ├── Makefile
 ├── build
@@ -12,20 +15,23 @@ $ sh new.sh to create project structure following the template
 └── src
     ├── Vector.cpp
     └── main.cpp
+```
+```bash
 $ make
 Creating directories
 Compiling: src/Vector.cpp -> build/Vector.o
 c++  -std=c++11 -Wall -Wextra -g -I include/ -I /usr/local/include -MP -MMD -c src/Vector.cpp -o build/Vector.o
 Compiling: src/main.cpp -> build/main.o
 c++  -std=c++11 -Wall -Wextra -g -I include/ -I /usr/local/include -MP -MMD -c src/main.cpp -o build/main.o
-Linking: build/bin/runner
-c++ build/Vector.o build/main.o -o build/bin/runner
-Making symlink: runner -> build/bin/runner
+Linking: build/bin/main
+c++ build/Vector.o build/main.o -o build/bin/main
+Making symlink: main -> build/bin/main
 
-$ ./runner
+$ ./main
 (3,3)
 
 $ make clean
-Deleting runner symlink
+Deleting main symlink
 Deleting directories
+```
 Generic makefile stolen from https://github.com/mbcrawfo/GenericMakefile
