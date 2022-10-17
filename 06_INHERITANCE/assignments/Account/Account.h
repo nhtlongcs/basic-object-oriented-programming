@@ -5,27 +5,27 @@
 class Account
 {
 protected:
-	float m_soDu;
+	float m_balance;
 
 public:
-	float baoSoDu()
+	float currBalance()
 	{
-		return m_soDu;
+		return m_balance;
 	}
-	void napTien(float soTien) { m_soDu += soTien; }
-	bool rutTien(float soTien)
+	void deposit(float amount) { m_balance += amount; }
+	bool withdraw(float amount)
 	{
-		if (soTien <= m_soDu)
+		if (amount <= m_balance)
 		{
-			m_soDu -= soTien;
+			m_balance -= amount;
 			return true;
 		}
 		return false;
 	}
 	Account(){};
-	Account(float soDu)
+	Account(float init_balance)
 	{
-		m_soDu = soDu;
+		m_balance = init_balance;
 	}
 	~Account(){};
 };
@@ -33,44 +33,44 @@ public:
 class SavingAccount : public Account
 {
 private:
-	int m_kyHangGui;
-	float m_laiSuat;
-	int m_soThang;
+	int m_peroid;
+	float m_profitRate;
+	int m_months;
 
 public:
-	void napTien(float soTien)
+	SavingAccount(){};
+	SavingAccount(float init_balance, int peroid, float profitRate, int months) : Account(init_balance)
 	{
-		int p = m_soThang / m_kyHangGui;
-		m_soDu = m_soDu * pow(1 + m_laiSuat, p);
-		m_soThang = 0;
-		Account::napTien(soTien);
+		m_peroid = peroid;
+		m_profitRate = profitRate;
+		m_months = months;
 	}
-	bool rutTien(float soTien)
+	~SavingAccount(){};
+	void deposit(float amount)
 	{
-		int p = m_soThang / m_kyHangGui;
-		float temp = m_soDu * pow(1 + m_laiSuat, p);
-		if (soTien <= temp)
+		int p = m_months / m_peroid;
+		m_balance = m_balance * pow(1 + m_profitRate, p);
+		m_months = 0;
+		Account::deposit(amount);
+	}
+	bool withdraw(float amount)
+	{
+		int p = m_months / m_peroid;
+		float temp = m_balance * pow(1 + m_profitRate, p);
+		if (amount <= temp)
 		{
 
-			m_soDu = temp;
-			return Account::rutTien(soTien);
-			m_soThang = 0;
+			m_balance = temp;
+			m_months = 0;
+			return Account::withdraw(amount);
 		}
 		else
 			return false;
 	}
-	void tangThang()
+	void incMonth()
 	{
-		m_soThang++;
+		m_months++;
 	}
-	SavingAccount(){};
-	SavingAccount(float soDu, int kyHang, float laisuat, int soThang) : Account(soDu)
-	{
-		m_kyHangGui = kyHang;
-		m_laiSuat = laisuat;
-		m_soThang = soThang;
-	}
-	~SavingAccount(){};
 };
 
 #endif

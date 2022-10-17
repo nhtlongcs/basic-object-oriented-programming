@@ -4,8 +4,8 @@
 class Vehicle
 {
 protected:
-	double m_gasRate;
-	double m_goodRate;
+	double m_gasRate;  // gallons per km
+	double m_goodRate; // goods per km
 	double m_gas;
 	double m_good;
 	double m_distance;
@@ -33,7 +33,7 @@ public:
 	}
 	bool run(double distance)
 	{
-		double Temp = distance * m_gasRate + distance * m_goodRate * m_good;
+		double Temp = distance * (m_gasRate + m_goodRate * m_good);
 		if (Temp < m_gas)
 		{
 			m_gas -= Temp;
@@ -56,29 +56,29 @@ public:
 	}
 	~Vehicle(){};
 };
-class Motor : public Vehicle
+class Bike : public Vehicle
 {
 public:
-	Motor() : Vehicle()
+	Bike() : Vehicle()
 	{
 		m_gasRate = 2.0 / 100;
 		m_goodRate = (0.1 / 10) / 100;
 	}
-	Motor(double gas, double good, double dist) : Vehicle(gas, good, dist)
+	Bike(double gas, double good, double dist) : Vehicle(gas, good, dist)
 	{
 		m_gasRate = 2.0 / 100;
 		m_goodRate = (0.1 / 10) / 100;
 	}
 };
-class Car : public Vehicle
+class Truck : public Vehicle
 {
 public:
-	Car() : Vehicle()
+	Truck() : Vehicle()
 	{
 		m_gasRate = 20.0 / 100;
 		m_goodRate = (1.0 / 1000) / 100;
 	}
-	Car(double gas, double good, double dist) : Vehicle(gas, good, dist)
+	Truck(double gas, double good, double dist) : Vehicle(gas, good, dist)
 	{
 		m_gasRate = 20.0 / 100;
 		m_goodRate = (1.0 / 1000) / 100;
