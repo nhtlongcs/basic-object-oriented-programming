@@ -1,4 +1,5 @@
 #include "monomial.h"
+
 int main()
 {
 	Monomial f, g;

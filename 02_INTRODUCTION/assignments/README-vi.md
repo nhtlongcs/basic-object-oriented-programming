@@ -58,13 +58,24 @@ Thông tin một học sinh bao gồm:
 - Họ tên.
 - Điểm văn, toán.
 Xây dựng lớp học sinh cho phép thực hiện các thao tác:
-- [ ] Nhập, xuất.
-- [ ] Lấy họ tên, điểm văn, toán.
-- [ ] Gán giá trị cho họ tên, điểm văn, điểm toán.
-- [ ] Tính điểm trung bình.
-- [ ] Xếp loại theo tiêu chí:
-- [ ] Giỏi (>= 8.0), (>= 8.0), Khá (>= 7.0). (>= 7.0).
-- [ ] Trung bình (>= 5.0), (>= 5.0), Yếu (< 5)
+- [x] Nhập, xuất.
+- [x] Lấy họ tên, điểm văn, toán.
+- [x] Gán giá trị cho họ tên, điểm văn, điểm toán.
+- [x] Tính điểm trung bình.
+- [x] Xếp loại theo tiêu chí:
+- [x] Giỏi (>= 8.0), (>= 8.0), Khá (>= 7.0). (>= 7.0).
+- [x] Trung bình (>= 5.0), (>= 5.0), Yếu (< 5)
+
+```
+nguyen van A
+7 8 
+nguyen van A
+Van : 7. Toan : 8
+abc def
+Van : 7. Toan : 8
+Mean score is: 7.5
+Student grade: Kha
+```
 
 ## 2.4 List
 
@@ -75,3 +86,20 @@ Xây dựng lớp mảng số nguyên cho phép thực hiện các thao tác sau
 - [ ] Gán giá trị cho phần tử tại vị trí nào đó.
 - [ ] Tìm phần tử nào đó trong mảng.
 - [ ] Sắp xếp tăng, giảm
+
+```
+7
+5 4 2 1 4 2 8
+N = 7
+A = 5 4 2 1 4 2 8 
+N = 7
+A = 5 4 2 1 10 2 8 
+Size of A is: 7
+Value at index 5 is: 2
+Sorted ascending: 
+N = 7
+A = 1 2 2 4 5 8 10 
+Sorted descending: 
+N = 7
+A = 10 8 5 4 2 2 1 
+```
