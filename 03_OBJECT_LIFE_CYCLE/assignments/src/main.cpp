@@ -1,4 +1,5 @@
 #include "vector.h"
+
 int main()
 {
 	vector<int> a(10, 2);
