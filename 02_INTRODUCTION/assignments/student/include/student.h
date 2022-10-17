@@ -1,6 +1,7 @@
 #ifndef STU_H
 #define STU_H
 
+#include <iostream>
 #include <string>
 using namespace std;
 class student

@@ -1,5 +1,5 @@
 #include "student.h"
-#include <iostream>
+
 void student::readData()
 {
 	getline(cin, this->m_name);
@@ -9,6 +9,7 @@ void student::writeData()
 {
 	cout << this->m_name << "\n";
 	cout << "Van : " << this->m_literature << ". Toan : " << this->m_math;
+	cout << endl;
 }
 string student::getName()
 {
