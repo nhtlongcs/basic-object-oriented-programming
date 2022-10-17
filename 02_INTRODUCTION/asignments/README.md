@@ -2,11 +2,12 @@
 * Nội dung: bài 2.1, 2.2, 2.3, và 2.4 trong slides 2.
 ## 2.1 Fraction
 Xây dựng lớp phân số cho phép thực hiện các thao tác:
-- [ ] Nhập, xuất.
-- [ ] Lấy tử số, mẫu số.
-- [ ] Gán giá trị cho tử số, mẫu số.
-- [ ] Nghịch đảo, rút gọn.
-- [ ] Cộng, nhân, so sánh với phân số khác
+- [x] Nhập, xuất.
+- [x] Lấy tử số, mẫu số.
+- [x] Gán giá trị cho tử số, mẫu số.
+- [x] Nghịch đảo, rút gọn.
+- [x] Cộng, nhân, so sánh với phân số khác
+
 ## 2.2 Polynomial
 Xây dựng lớp đơn thức cho phép thực hiện các thao tác:
 - [ ] Nhập, xuất.
