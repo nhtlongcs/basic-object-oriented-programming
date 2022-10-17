@@ -10,7 +10,7 @@ void list::readData()
 };
 void list::writeData()
 {
-	cout << this->m_size << "\n";
+	cout << "N = " << this->m_size << "\nA = ";
 	for (int i = 0; i < this->m_size; ++i)
 		cout << this->m_a[i] << " ";
 	cout << "\n";
