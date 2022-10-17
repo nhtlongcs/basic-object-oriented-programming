@@ -2,7 +2,11 @@
 #include <math.h>
 void Monomial::readData()
 {
-	cin >> this->m_coefficent >> this->m_exponent;
+	cout << "Enter coefficent: ";
+	cin >> m_coefficent;
+	cout << "Enter exponent: ";
+	cin >> m_exponent;
+	cout << endl;
 }
 void Monomial::writeData()
 {
