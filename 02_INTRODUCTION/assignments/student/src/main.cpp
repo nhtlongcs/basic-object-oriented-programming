@@ -2,15 +2,15 @@
 
 int main()
 {
-	student Hs;
-	Hs.readData();
-	Hs.writeData();
+	student s;
+	s.readData();
+	s.writeData();
 	// Expected output: same as input
-	Hs.assignName("abc def");
-	Hs.writeData();
+	s.assignName("abc def");
+	s.writeData();
 	// Expected output: student name is "abc def"
-	double score = Hs.calMeanScore();
-	string grade = Hs.getGrade();
+	double score = s.calMeanScore();
+	string grade = s.getGrade();
 	cout << "Mean score is: " << score << endl;
 	cout << "Student grade: " << grade << endl;
 	return 0;
