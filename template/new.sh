@@ -1,3 +1,5 @@
 mkdir src
-mkdir build
+mv *.cpp src
 mkdir include
+mv *.h include
+mkdir build
