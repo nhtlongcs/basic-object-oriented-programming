@@ -1,4 +1,4 @@
-#include "Nomial.h"
+#include "nomial.h"
 
 double Nomial::coefficient()
 {
@@ -90,6 +90,7 @@ Nomial &Nomial::operator--()
 	this->_degree--;
 	return (*this);
 }
+
 Nomial Nomial::operator++(int x)
 {
 	Nomial temp(*this);
