@@ -6,6 +6,8 @@ class Vehicle
 protected:
 	double m_gasRate;  // gallons per km
 	double m_goodRate; // goods per km
+
+private:
 	double m_gas;
 	double m_good;
 	double m_distance;
