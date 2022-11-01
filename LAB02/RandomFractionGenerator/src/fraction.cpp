@@ -16,29 +16,44 @@ Fraction Fraction::rand()
 {
     RandomIntegerGenerator *generator = RandomIntegerGenerator::getInstance();
     int numerator = generator->next();
-    int denominator = generator->next();
+    int denominator = generator->next() + 1;
     return Fraction(numerator, denominator);
 }
 Fraction Fraction::rand(int n_range, int d_range)
 {
     RandomIntegerGenerator *generator = RandomIntegerGenerator::getInstance();
-    int numerator = generator->next(n_range);
-    int denominator = generator->next(d_range);
+    int numerator = generator->next(n_range) + 1;
+    int denominator = generator->next(d_range) + 1;
     return Fraction(numerator, denominator);
 }
 
 Fraction Fraction::rand(int range)
 {
     Fraction init = Fraction::rand(range, range);
-    int numerator = init.numerator + 1;
+    int numerator = init.numerator;
     int denominator = init.denominator;
     numerator = numerator % denominator;
     numerator += denominator * (range - 1);
     return Fraction(numerator, denominator);
 }
+
 std::string Fraction::toString()
 {
-    return std::to_string(this->numerator) + "/" + std::to_string(this->denominator);
+    std::string result = "";
+    int coeff = numerator / denominator;
+    if (coeff != 0)
+    {
+        result += std::to_string(coeff);
+        result += " ";
+    }
+    int remainder = numerator % denominator;
+    if (remainder != 0)
+    {
+        result += std::to_string(remainder);
+        result += "/";
+        result += std::to_string(denominator);
+    }
+    return result;
 }
 std::string Fraction::percentage()
 {
