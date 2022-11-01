@@ -1,0 +1,6 @@
+5
+3/7
+11/2invalid data
+9/6
+25/1invalid data
+7/2
