@@ -12,16 +12,15 @@ int IntegersFromKeyboard::read_safe(int min, int max)
         e->setErrorCode(ErrorCode::EmptyInput);
         return -1;
     }
-    try
-    {
-        number = stoi(buffer);
-    }
-    catch (...)
+
+    string pattern = "\\d+"; // \d: digits only 0-9, +: one or more
+    bool matched = regex_match(buffer, regex(pattern));
+    if (!matched)
     {
         e->setErrorCode(ErrorCode::InvalidFormat);
-    }
-    if (e->getErrorCode() != ErrorCode::OK)
         return -1;
+    }
+    number = stoi(buffer);
     if (number < min || number > max)
     {
         e->setErrorCode(ErrorCode::OutOfRange);
