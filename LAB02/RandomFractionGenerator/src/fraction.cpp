@@ -26,6 +26,16 @@ Fraction Fraction::rand(int n_range, int d_range)
     int denominator = generator->next(d_range);
     return Fraction(numerator, denominator);
 }
+
+Fraction Fraction::rand(int range)
+{
+    Fraction init = Fraction::rand(range, range);
+    int numerator = init.numerator + 1;
+    int denominator = init.denominator;
+    numerator = numerator % denominator;
+    numerator += denominator * (range - 1);
+    return Fraction(numerator, denominator);
+}
 std::string Fraction::toString()
 {
     return std::to_string(this->numerator) + "/" + std::to_string(this->denominator);

@@ -40,6 +40,7 @@ void example()
     }
     cout << endl;
 }
+
 int main()
 {
     example();
