@@ -1,0 +1,3 @@
+Category: ID=1, Name=Laptop
+Category: ID=2, Name=Keyboard
+Category: ID=3, Name=Mouse
