@@ -3,7 +3,7 @@
 #include <thread>
 #include "category.h"
 #include "product.h"
-
+#include <regex>
 class Shop
 {
 public:
@@ -33,14 +33,39 @@ public:
             cout << '[' << i << "] :" << product_manager.getProduct(result[i]).toString() << endl;
         }
     }
+
     void findProductsByPrice()
     {
         int minP, maxP;
+        string minS, maxS;
+        string pattern = "((0|[1-9][0-9]{0,2})(.\\d{3})*(\\.\\d{3}))";
+        std::smatch match;
         cout << "Please enter the minimum price of the product you want to find: ";
-        cin >> minP;
+        cin >> minS;
+        if (std::regex_search(minS, match, std::regex(pattern)))
+        {
+            minP = stoi(std::regex_replace(match.str(1), std::regex("\\."), ""));
+        }
+        else
+        {
+            cout << "Invalid price" << endl;
+            return;
+        }
+
         cout << "Please enter the maximum price of the product you want to find: ";
-        cin >> maxP;
-        cout << "Searching for products within the price range of [" << minP << ", " << maxP << "]" << endl;
+        cin >> maxS;
+
+        if (std::regex_search(maxS, match, std::regex(pattern)))
+        {
+            maxP = stoi(std::regex_replace(match.str(1), std::regex("\\."), ""));
+        }
+        else
+        {
+            cout << "Invalid price" << endl;
+            return;
+        }
+
+        cout << "Searching for products within the price range of [" << minS << ", " << maxS << "]" << endl;
         vector<int> result = product_manager.searchInRange(minP, maxP);
         cout << "Found " << result.size() << " products" << endl;
         for (int i = 0; i < result.size(); i++)

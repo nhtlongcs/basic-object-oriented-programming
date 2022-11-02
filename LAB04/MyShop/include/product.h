@@ -11,17 +11,31 @@
 #include "category.h"
 using namespace std;
 
+class Price
+{
+public:
+    int value;
+    string str;
+
+public:
+    Price() {}
+    Price(int price, string price_str)
+    {
+        this->value = price;
+        this->str = price_str;
+    }
+};
 class Product
 {
 public:
     int id;
     string name;
     Category *cat;
-    int price;
+    Price price;
 
 public:
     Product(){};
-    Product(int id, string name, Category *cat, int price)
+    Product(int id, string name, Category *cat, Price price)
     {
         this->id = id;
         this->name = name;
@@ -31,7 +45,7 @@ public:
     }
     string toString()
     {
-        return "ID: " + to_string(id) + ", Name: " + name + ", Category: " + cat->name + ", Price: " + to_string(price);
+        return "ID: " + to_string(id) + ", Name: " + name + ", Category: " + cat->name + ", Price: " + price.str + " d";
     }
 };
 
@@ -44,7 +58,7 @@ public:
     ProductManager(){};
     ProductManager(string filepath, CategoryManager *cManager)
     {
-        string product_pattern = "Product: ID=(\\d+), Name=([^,]*), Price=(\\d+), CategoryID=(\\d+)";
+        string product_pattern = "Product: ID=(\\d+), Name=([^,]*), Price=((0|[1-9][0-9]{0,2})(.\\d{3})*(\\.\\d{3})), CategoryID=(\\d+)";
         std::ifstream file(filepath);
         for (std::string line; std::getline(file, line);)
         {
@@ -53,11 +67,19 @@ public:
             logger->debug("Found: " + to_string(std::regex_search(line, match, std::regex(product_pattern))));
             if (std::regex_search(line, match, std::regex(product_pattern)))
             {
+                // print all match
+                for (int i = 0; i < match.size(); i++)
+                {
+                    logger->debug("Match " + to_string(i) + ": " + match.str(i));
+                }
                 int id = stoi(match[1]);
                 string name = match[2];
-                int price = stoi(match[3]);
-                int categoryId = stoi(match[4]);
-                logger->debug("ID: " + to_string(id) + ", Name: " + name + ", Price: " + to_string(price) + ", Category name: " + cManager->getCategory(categoryId)->name);
+                string sprice = match.str(3);
+                int iprice = stoi(std::regex_replace(match.str(3), std::regex("\\."), ""));
+                Price price = Price(iprice, sprice);
+
+                int categoryId = stoi(match[7]);
+                logger->debug("ID: " + to_string(id) + ", Name: " + name + ", Price: " + price.str + ", Category name: " + cManager->getCategory(categoryId)->name);
                 Product product = Product(id, name, cManager->getCategory(categoryId), price);
                 addProduct(product);
             }
@@ -89,7 +111,7 @@ public:
         vector<int> result;
         for (auto const &[key, val] : products)
         {
-            if (val.price >= from && val.price <= to)
+            if (val.price.value >= from && val.price.value <= to)
             {
                 result.push_back(val.id);
             }

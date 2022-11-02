@@ -21,5 +21,5 @@ if __name__ == "__main__":
             # parse line format with regex
             # Product: ID=15, Name=Dell XPS 9560, Price=40000.000, CategoryID=1
             # Product: ID=20, Name=Keychron K6, Price=1200000, CategoryID=2
-            ret = re.match(r'Product: ID=(\d+), Name=([^,]*), Price=(\d+), CategoryID=(\d+)', line)
+            ret = re.match(r'Product: ID=(\d+), Name=([^,]*), Price=((0|[1-9][0-9]{0,2})(.\d{3})*(\.\d{3})), CategoryID=(\d+)', line)
             print(ret.groups())

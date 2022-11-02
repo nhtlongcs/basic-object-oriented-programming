@@ -1,8 +1,8 @@
-Product: ID=15, Name=Dell XPS 9560, Price=40000000, CategoryID=1
-Product: ID=16, Name=Macbook Pro 16" 2019, Price=70000000, CategoryID=1
-Product: ID=17, Name=Surface Pro 8, Price=23000000, CategoryID=1
-Product: ID=18, Name=Mitsumi M1, Price=300000, CategoryID=2
-Product: ID=19, Name=Logitech K380, Price=580000, CategoryID=2
-Product: ID=20, Name=Keychron K6, Price=1200000, CategoryID=2
-Product: ID=21, Name=Apple Magic Mouse, Price=2100000, CategoryID=3
-Product: ID=22, Name=Surface Mouse 2, Price=3000000, CategoryID=3
+Product: ID=15, Name=Dell XPS 9560, Price=40.000.000, CategoryID=1
+Product: ID=16, Name=Macbook Pro 16" 2019, Price=70.000.000, CategoryID=1
+Product: ID=17, Name=Surface Pro 8, Price=23.000.000, CategoryID=1
+Product: ID=18, Name=Mitsumi M1, Price=300.000, CategoryID=2
+Product: ID=19, Name=Logitech K380, Price=580.000, CategoryID=2
+Product: ID=20, Name=Keychron K6, Price=1.200.000, CategoryID=2
+Product: ID=21, Name=Apple Magic Mouse, Price=2.100.000, CategoryID=3
+Product: ID=22, Name=Surface Mouse 2, Price=3.000.000, CategoryID=3
