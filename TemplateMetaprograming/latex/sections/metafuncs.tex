@@ -1,0 +1,106 @@
+\section{Template và Metafunction}
+\label{sec:template}
+Trong mục này, ta sẽ thảo luận về các khái niệm cơ bản thông qua từng ví dụ. Mở đầu là ví dụ cơ bản về \textbf{metafunction}. Tiếp đến là về \textbf{specialization} được sử dụng cho các trường hợp cụ thể hoá đầu vào. Sau đó sẽ là về các thao tác và ngữ cảnh cơ bản với \textbf{template} thông qua tham số là kiểu dữ liệu.
+\subsection{Khởi đầu}
+\begin{lstlisting}[caption={Ví dụ cho hàm trị tuyệt đối \cite{Walter}},label={code:abs},language=C++]
+template <int N>
+struct abs {
+    static_assert(N != INT_MIN); // There is no opposite number of the smallest int
+    static constexpr auto value = (N > 0) ? N : -N;
+}
+// ...
+int const n = -15;
+std::cout << (abs<n>::value) << std::endl;
+\end{lstlisting}
+
+Khi làm việc với compile-time, chúng ta sẽ không thể can thiệp vào các ảnh hưởng trong lúc run-time, và chính vì thế chỉ có thể làm việc với các biến số ta biết được tại thời điểm compile. \textbf{Đoạn mã \ref{code:abs}} cho thấy có thể gọi \textbf{abs<-3>}, hay tổng quát hơn có thể gọi \textbf{abs<n>} với $n$ là hằng số. Đó là bởi vì trình biên dịch biết được $n$ tại thời điểm biên dịch. Tóm tắt, \textbf{templates} được sử dụng để sinh ra code tại thời điểm biên dịch, \textbf{sử dụng các thông tin mà trình biên dịch biết được tại compile-time.}
+
+\textbf{abs} là một \textbf{template struct}. Được gán giá trị như là một là một thuộc tính \textbf{static} có thể gọi giá trị mà không cần khởi tạo thực thể \textbf{abs} (như thể đang làm việc với \textbf{namespace}). Phương thức cài đặt trên được gọi là một \textbf{metafunction}.
+\subsection{Specialization}
+\label{sec:specialization}
+Đối với trường hợp các hàm lặp, hay chúng ta muốn chỉ định cụ thể hoá đầu vào như một chữ ký hàm, ta có thể sử dụng kĩ thuật \textbf{specialization}. Ở ví dụ mã nguồn \ref{code:gcd}, tìm ước chung lớn nhất cho hai hằng số biết trước ở thời điểm biên dịch. Điểm đặc biệt có thể thấy ở đây chính là quá trình đệ quy này sẽ kết thúc khi \textbf{N=0}. Chính vì thế. Cụ thể hoá trường hợp này như hàm \textbf{gcd<M,0>}, đây gọi là kĩ thuật \textbf{partial specialization}.
+\begin{lstlisting}[caption={Ví dụ cho hàm đệ quy \cite{Walter}},label={code:gcd},language=C++]
+template <unsigned M, unsigned N> 
+struct gcd {
+    static constexpr auto value = gcd<N, M%N>::value;
+}
+
+template <unsigned M>
+// partial specialization
+struct gcd<M,0> { 
+    static_assert(M != 0);
+    static constexpr auto value = M;
+}
+\end{lstlisting}
+
+\subsection{Template với tham số là kiểu dữ liệu}
+
+Tuy nhiên trong hầu hết các trường hợp, \textbf{template} trong C++ được biết đến nhiều hơn với cách sử dụng với tham số đầu vào là kiểu dữ liệu. Khác với các ví dụ trên, \textbf{templates} nhận vào là các giá trị được biết đến trong compile-time. Ở đây có thể gọi một hàm nhưng hoạt động với nhiều kiểu dữ liệu khác nhau, như \textbf{int} hay \textbf{double} đều hoạt động một cách tương tự.
+
+\begin{lstlisting}[caption={Đếm số chiều của một array-type \cite{Walter}},label={code:rank},language=C++]
+template <class T>
+// general (meta)function for all type T
+struct rank { static constexpr size_t value = 0; } 
+
+template <class T, size_t N>
+// partial spec for array type, T[N] has at least one dimension [N]
+struct rank <T[N]> { 
+    // removed dimension [N], the remaining is T
+    static constexpr size_t value = 1 + rank<T>::value; 
+}
+\end{lstlisting}
+
+Ví dụ \ref{code:rank} cho ta thấy được cú pháp khi truyền vào template một loại dữ liệu dạng mảng nhiều chiều và tính toán số chiều của chúng. Còn về mặt tính toán, hàm sẽ trả về 0 nếu không phải là loại dữ liệu dạng mảng, ngược lại sẽ trả về kết quả là \textbf{1 + số chiều còn lại sau khi giảm 1 chiều}. Khi viết \textbf{template} nhận vào là kiểu dữ liệu, có thể viết là \textbf{class T} hoặc \textbf{typename T}, không khác biệt. Tuy nhiên \textbf{typename} sử dụng trong một ngữ cảnh khác.
+
+\subsection{Template trả về kiểu dữ liệu}
+
+Ngoài việc sử dụng kiểu dữ liệu như tham số đầu vào, \textbf{metafunction} còn có thể trả về kết quả là một kiểu dữ liệu. Ở ví dụ \ref{code:rmconst}, mục tiêu của hàm là trả về kiểu dữ liệu không còn là hằng số, ví dụ như đầu vào là \textbf{const int}, hàm sẽ trả về \textbf{int}. Ta có thể thấy \textbf{remove} ở đây chính là \textbf{trả về một kiểu dữ liệu tương đồng với dữ liệu đầu vào} và không phải \textbf{const}.
+
+\begin{lstlisting}[caption={Xoá const của một kiểu dữ liệu \cite{Walter}},label={code:rmconst},language=C++]
+template <class T>
+// generally, just throw back whatever type the user gave you....
+struct remove_const { using type = T; } 
+
+template <class T>
+// ... but if the user gave something has const with it, 
+// return them the same thing but without const
+struct remove_const<T const> { using type = T; } 
+typename remove_const<T>::type var1; 
+typename remove_const_t<T> var2; // C++14 equivalent
+\end{lstlisting}
+
+Ví dụ \ref{code:rmconst} hoạt động bằng cách sử dụng một trường hợp tổng quát và \textbf{specialize} trường hợp đầu vào là kiểu dữ liệu \textbf{const} để xử lý.
+Quy ước thường được dùng khi \textbf{metafunction} trả về một kiểu dữ liệu có \textbf{typename} bên trong đại diện cho tên kiểu dữ liệu sẽ được đặt tên là \textbf{type}. Khai báo một biến bắt đầu bằng \textbf{typename}, lúc này \textbf{typename} có thể coi là kiểu dữ liệu. Để truy cập \textbf{typename} được trả về, ta có thể sử dụng cú pháp \textbf{remove\_const<T>::type} hoặc hậu tố \textbf{\_t} như trên ví dụ.
+
+\begin{lstlisting}[caption={Trả về kiểu dữ liệu dựa trên điều kiện \cite{Walter}},label={code:if},language=C++]
+template <class T>
+struct type_is { using type = T; }
+
+template <bool, class T, class> // unnamed params as place holders
+struct IF : type_is<T> { }; // general
+
+template <class T, class F>
+struct IF<false, T, F> : type_is<F> { }; // partial specialization
+\end{lstlisting}
+
+\noindent Ví dụ (\ref{code:if}) về \textbf{metafunction} sử dụng các kĩ thuật trên để trả về đầu tiên nếu giá trị \textbf{boolean} là true, ngược lại trả về tên kiểu thứ hai.
+
+\subsection{Variadic template}
+Trong lập trình template, \textbf{variadic template} là kỹ thuật sử dụng template có số lượng tham số không cố định\cite{Variadic}. Đặc trưng của kỹ thuật này là sử dụng toán tử "\dots" để thể hiện chiều dài không xác định của danh sách tham số (gọi là \textbf{parameter pack}). Các parameter pack có thể được mở rộng thông qua việc xử lí lần lượt các argument và giảm số lượng argument ở mỗi lần gọi đệ quy, cho đến khi gặp \textbf{specialization} trùng khớp nhất. Khi lập trình meta bằng template, variadic template đóng vai trò đóng gói các danh sách kiểu dữ liệu (\textbf{typelist}), nhờ đó ta có thể truy xuất từng kiểu dữ liệu theo độ dài của typelist bằng việc gọi đệ quy, điều này giúp tính toán trên kiểu dữ liệu dễ dàng hơn.
+
+Ta xem xét ví dụ về việc sử dụng variadic template để cài đặt phương thức \textbf{is\_one\_of} của thư viện \textbf{type\_traits}. Phương thức này kiểm tra xem một kiểu \textbf{T} có thuộc danh sách kiểu hay không.
+
+\begin{lstlisting}[caption={Ví dụ variadic template \cite{Walter}},label={code:variadic},language=C++]
+template <class T, class... P0toN>
+struct is_one_of;
+
+template <class T>
+struct is_one_of<T> : false_type{};
+
+template <class T, class... P1toN>
+struct is_one_of<T, T, P1toN...> : true_type {};
+
+template <class T, class P0, class... P1toN>
+struct is_one_of<T, P0, P1toN...> : is_one_of<T, P1toN...> {};
+\end{lstlisting}
+Đầu tiên, ta khai báo interface của \textbf{metafunction is\_one\_of}. Sau đó, lần lượt cài đặt các \textbf{specialization của template với các danh sách tham số khác nhau}. Hai trường hợp cơ sở bao gồm trường hợp \textbf{T đứng đầu typelist P0toN}, và trường hợp \textbf{typelist không còn kiểu nào} (tức là đã duyệt hết danh sách), ta lần lượt trả về \textbf{true\_type} và \textbf{false\_type}. Còn ở trường hợp cuối, ta thấy \textbf{P0} được tách ra từ \textbf{P0toN}, và với việc gọi đệ quy, P1, P2, \dots cũng sẽ dần được bóc tách ra khỏi typelist cho đến khi specialization template được gọi và trả về \textbf{true\_type/false\_type}.

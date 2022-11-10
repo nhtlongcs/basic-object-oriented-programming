@@ -1,0 +1,166 @@
+\section{Tính đa hình}
+\subsection{Tính đa hình động}
+Tiếp cận đến các kĩ thuật thiết kế thì tính đa hình là một trong các chủ đề ứng dụng cao. Cụ thể có nhiều loại đa hình nhưng trong phần này sẽ tập trung vào mô tả tính đa hình trên góc nhìn hướng đối tượng (OOP) dựa trên \textbf{virtual function} (hay có thể coi là tính \textbf{đa hình run-time}\cite{poly-cpp}) và so sánh với \textbf{tính đa hình compile-time}\cite{poly-cpp} dựa trên template. 
+
+Tính đa hình động, hoạt động lúc run-time (thời điểm chạy chương trình). Nó hoạt động dựa trên hướng đối tượng và cho phép chúng ta phân tách giữa interface để giao tiếp và việc thực hiện phân cấp lớp kế thừa, từ đó có thể tác động những thay đổi đến cách hoạt động trong lúc run-time.
+
+\begin{lstlisting}[caption={Dynamic polymophism \cite{poly}},label={code:dynamic},language=C++]
+#include <chrono>
+#include <iostream>
+
+auto start = std::chrono::steady_clock::now();
+
+void writeElapsedTime(){
+    auto now = std::chrono::steady_clock::now();
+    std::chrono::duration<double> diff = now - start;
+  
+    std::cerr << diff.count() << " sec. elapsed: ";
+}
+
+struct MessageSeverity{                         
+	virtual void writeMessage() const {         
+		std::cerr << "unexpected" << '\n';
+	}
+};
+
+struct MessageInformation: MessageSeverity{     
+	void writeMessage() const override {        
+		std::cerr << "information" << '\n';
+	}
+};
+
+struct MessageWarning: MessageSeverity{         
+	void writeMessage() const override {        
+		std::cerr << "warning" << '\n';
+	}
+};
+
+struct MessageFatal: MessageSeverity{};
+
+void writeMessageReference(const MessageSeverity& messServer){   // (1)
+	
+	writeElapsedTime();
+	messServer.writeMessage();
+	
+}
+
+void writeMessagePointer(const MessageSeverity* messServer){    // (2)
+	
+	writeElapsedTime();
+	messServer->writeMessage();
+	
+}
+
+int main(){
+
+    std::cout << '\n';
+  
+    MessageInformation messInfo;
+    MessageWarning messWarn;
+    MessageFatal messFatal;
+  
+    MessageSeverity& messRef1 = messInfo;        // (3)      
+    MessageSeverity& messRef2 = messWarn;        // (4)
+    MessageSeverity& messRef3 = messFatal;       // (5)
+  
+    writeMessageReference(messRef1);              
+    writeMessageReference(messRef2);
+    writeMessageReference(messRef3);
+  
+    std::cerr << '\n';
+  
+    MessageSeverity* messPoin1 = new MessageInformation;   // (6)
+    MessageSeverity* messPoin2 = new MessageWarning;       // (7)
+    MessageSeverity* messPoin3 = new MessageFatal;         // (8)
+  
+    writeMessagePointer(messPoin1);               
+    writeMessagePointer(messPoin2);
+    writeMessagePointer(messPoin3);
+  
+    std::cout << '\n';
+
+}
+
+\end{lstlisting}
+
+Ví dụ \ref{code:dynamic} trên ta thấy \textbf{MessageSeverity} là một kiểu dữ liệu \textbf{static} đại diện cho interface để giao tiếp của các lớp kế thừa, kiểu \textbf{dynamic MessageInformation} để kế thừa và thực hiện nó. Kiểu static được sử dụng tại compile-time và kiểu dynamic tại run-time. Tại thời điểm chạy, \textbf{messPoint1} có kiểu \textbf{MessageInformation}; do đó, hàm ảo \textbf{writeMessage} của \textbf{MessageInformation} được gọi, đây gọi là \textbf{dynamic dispatch}. Một lần nữa, \textbf{dynamic dispatch} yêu cầu một thực thể gián tiếp như một con trỏ làm tham chiếu hoặc có thể sử dụng một hàm ảo.
+\textbf{writeMessagePointer} yêu cầu mỗi đối tượng đầu vào phải là kế thừa từ \textbf{MessageSeverity}. Nếu vi phạm điều này thì trình biên dịch sẽ báo lỗi.
+
+\textit{\textbf{Dynamic dispatch} là thuật ngữ để chỉ việc chương trình cần chọn cách cài đặt nào để định nghĩa phương thức đa hình (được kế thừa) để gọi tại run-time.}
+Loại đa hình này là một thiết kế \textbf{contract-driven} \cite{poly}. Hàm 
+
+\subsection{Tính đa hình tĩnh và giới thiệu bài toán \textit{duck-typing}}
+Trái ngược với thiết kế theo \textbf{contract-driven}, thiết kế sử dụng \textbf{template} thích hợp với thiết kế \textbf{behavioral-driven} \cite{poly} với tính đa hình tĩnh.
+
+Ở hướng tiếp cận này, cách thiết kế sẽ quan tâm đến \textbf{behavior} hơn là \textbf{interface}, hay nôm na là quy định giữa các đối tượng, ý tưởng này còn gọi là \textbf{duck-typing}\cite{duck-type}.
+
+\textbf{“When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck.”} - Trích \textbf{James Whitcomb Rileys}\cite{duck-test}.
+
+\begin{lstlisting}[caption={Dynamic polymophism \cite{poly}},label={code:static},language=C++]
+// duckTyping.cpp
+
+#include <chrono>
+#include <iostream>
+
+auto start = std::chrono::steady_clock::now();
+
+void writeElapsedTime(){
+    auto now = std::chrono::steady_clock::now();
+    std::chrono::duration<double> diff = now - start;
+  
+    std::cerr << diff.count() << " sec. elapsed: ";
+}
+
+struct MessageSeverity{
+  void writeMessage() const {
+      std::cerr << "unexpected" << '\n';
+  }
+};
+
+struct MessageInformation {
+  void writeMessage() const {              
+    std::cerr << "information" << '\n';
+  }
+};
+
+struct MessageWarning {
+  void writeMessage() const {               
+    std::cerr << "warning" << '\n';
+  }
+};
+
+struct MessageFatal: MessageSeverity{};     
+
+template <typename T>
+void writeMessage(T& messServer){    // (1)                   
+	
+	writeElapsedTime();                                   
+	messServer.writeMessage();                            
+	
+}
+
+int main(){
+
+    std::cout << '\n';
+  
+    MessageInformation messInfo;
+    writeMessage(messInfo);
+    
+    MessageWarning messWarn;
+    writeMessage(messWarn);
+
+    MessageFatal messFatal;
+    writeMessage(messFatal);
+  
+    std::cout << '\n';
+
+}
+
+\end{lstlisting}
+Điều này tương tự với ví dụ \ref{code:static}, hàm \textbf{acceptOnlyDucks} chỉ chấp nhận đối tượng vịt làm tham số. Trong các ngôn ngữ như C ++, tất cả các kiểu bắt nguồn từ vịt đều có thể được sử dụng để gọi hàm. Tuy nhiên với thiết kế \textbf{behavioral-driven} tất cả các kiểu, hoạt động giống như con vịt, đều có thể được sử dụng để gọi hàm. Để làm cho nó cụ thể hơn: nếu một con chim hành xử như một con vịt, nó là một con vịt.
+
+Trong trường hợp đang xem xét, nếu ta gọi hàm \textbf{acceptsOnlyDucks} với biến số là một con chim và mong đợi kết quả trả về không có bất kì lỗi nào cả, nếu có chúng ta sẽ coi nó là các ngoại lệ với \textbf{exception clause}. Một cách cơ bản thì chiến lược này được sử dụng trong Python. Và để làm điều này, \textbf{template} là một công cụ không thể thiếu trong \textbf{C++}. Trở về ví dụ trước đó, ta sẽ sử dụng \textbf{duck-typing}.
+
+Hàm \textbf{writeMessage} áp dụng kiểu duck-typing. Hàm \textbf{writeMessage} giả định rằng tất cả các đối tượng messServer hỗ trợ phương thức \textbf{writeMessage}. Nếu không, quá trình biên dịch sẽ không thành công. Sự khác biệt chính đối với Python là lỗi xảy ra trong C ++ tại thời điểm biên dịch, nhưng trong Python tại thời điểm chạy.
+
+Hàm \textbf{writeMessage} hoạt động đa hình, nhưng không an toàn về kiểu dữ liệu cũng như không ghi thông báo lỗi có thể đọc được trong trường hợp có lỗi

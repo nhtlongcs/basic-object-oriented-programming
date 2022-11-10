@@ -1,0 +1,172 @@
+\section{Concepts}
+\subsection{Định nghĩa và khái niệm}
+Lập trình với template cho phép định nghĩa hàm và lớp với nhiều loại kiểu dữ liệu. Do đó, trường hợp khai báo hay sử dụng một template với kiểu dữ liệu sai có thể dẫn đến kết quả lỗi tiềm ẩn do đối tượng hay kiểu dữ liệu không thoả mãn các yêu cầu hay ràng buộc của template. Một trong các khái niệm được đưa ra để giải quyết vấn đề trên là \textbf{concepts}. Có thể hiểu khái niệm này như một nó chỉ là một cái template parameter, lúc này trình biên dịch có thể kiểm tra các tham số đầu vào. Các lợi ích khi sử dụng concepts bao gồm.
+\begin{itemize}
+    \item Khi sử dụng concepts, parameter-pack của template lúc này có thể ngầm hiểu là interface của đối tượng (tính đa hình tĩnh đã đề cập ở mục trên).
+    \item Overloading hay specializing có thể được viết dựa trên các concepts.
+    \item Lúc này các lỗi tiềm ẩn sẽ được chuyển thành các lỗi tường minh khi chúng ta kiểm tra kiểu dữ liệu đầu vào so với mẫu được quy định.
+\end{itemize}
+
+\noindentĐể định nghĩa và sử dụng một concepts, cú pháp đơn giản sẽ là 
+
+
+\begin{lstlisting}[caption={Cú pháp concept \cite{concept-def}},label={code:syntax},language=C++]
+template <template-parameter-list>
+concept concept-name = constraint-expression;
+\end{lstlisting}
+
+Về cơ bản \textbf{concept}\cite{concept-cpp} có thể coi là một \textbf{metafunction} để kiểm tra điều kiện, đầu vào là danh sách các tham số đầu vào. \textbf{concept} sẽ là một biểu thức ràng buộc để định nghĩa concept đó. Thường thì ràng buộc này sẽ là một \textbf{predicate} trả về giá trị \textbf{true} hoặc \textbf{false}. Có hai cách để viết biểu thức này, một là sử dụng các kết hợp của phép logic sẽ được giới thiệu ở phần này, hai là sử dụng \textbf{requires expression} sẽ được giới thiệu ở mục \ref{sec:require_expr}
+
+\textit{\textbf{Predicate}}\cite{predicate} \textit{là một hàm trả về giá trị boolean hoặc một đối tượng có phương thức \textbf{bool operator()}. Thường sẽ là câu trả lời nhanh cho các tham số đầu vào, ví dụ dễ hiểu có thể nhắc đến các phương thức \textbf{predicate} mặc định được cài đặt trong thư viện \href{http://en.cppreference.com/w/cpp/algorithm}{STL algorithms} như là lớn hơn hay bé hơn. Tuy nhiên chỉ dùng cho việc hình dung một cách gần gũi, ở ngữ cảnh hiện tại chỉ hỗ trợ các \textbf{compile-time predicate}}.
+
+\begin{lstlisting}[caption={Integral concept\cite{concept-def}},label={code:integral},language=C++]
+template <typename T>
+concept Integral = std::is_integral<T>::value;
+
+Integral auto gcd(Integral auto a, Integral auto b) {
+    if( b == 0 ) return a;
+    else return gcd(b, a % b);
+}    
+\end{lstlisting}
+Ví dụ \ref{code:integral} mô tả cách hoạt động của concept một cách đơn giản. Ở ví dụ trên, \textbf{concept Integral} được định nghĩa bằng một điều kiện chính là \textbf{std::is\_integral<T>::value} phải là \textbf{true}, tức là tham số là kiểu số nguyên bao gồm \textbf{int, long long, ...}. Ngược lại trình biên dịch sẽ báo lỗi.
+
+\begin{lstlisting}[caption={Combine logic concept\cite{concept-def}},label={code:logic},language=C++]
+template <typename T>         
+concept Integral = std::is_integral<T>::value;
+
+template <typename T>          
+concept SignedIntegral = Integral<T> && std::is_signed<T>::value;
+
+template <typename T>           
+concept UnsignedIntegral = Integral<T> && !SignedIntegral<T>;
+\end{lstlisting}
+% https://stackoverflow.com/questions/14676574/differences-between-stdis-integer-and-stdis-integral
+Ví dụ \ref{code:logic} sử dụng các \textbf{predicates} có sẵn của thư viện \href{https://en.cppreference.com/w/cpp/header/type_traits}{type\_traits}, hỗ trợ các predicate tại compile-time, từ đó xây dựng các concept \textit{Integral, SignedIntegral, UnsignedIntegral} bằng cách sử dụng \textbf{expression} được kết hợp bằng các kiểu thức logic $(\&\&,||,!)$
+
+\subsection{Sử dụng concepts với từ khoá requires}
+\label{sec:require_expr}
+Ở phần này, ta sẽ tập trung mô tả về cách sử dụng \textbf{requires}, hay còn gọi là cách để viết các biểu thức requires, từ đó ta có thể định nghĩa các concepts cụ thể và chi tiết hơn. Để định nghĩa cụ thể và rõ ràng requires hơn, các khái niệm simple, type, compound, hay nested requirements được đề xuất. Cấu trúc của biểu thức như sau:
+\begin{lstlisting}[caption={Cú pháp của requires\cite{concept-req}},label={code:require_syntx},language=C++]
+requires (parameter-list(optional)) {requirement-seq}
+\end{lstlisting}
+Trong đó, \textbf{parameter-list} là danh sách các tham số được phân tách bởi dấu \textbf{,} và \textbf{requirement-seq} là một chuỗi các requires. Việc sử dụng requrires có thể kế thừa các concept đã được định nghĩa trước đó. Ví dụ như
+\begin{lstlisting}[caption={Integral concept sử dụng requires\cite{concept-req}},label={code:integral2},language=C++]
+template<typename T>                                  
+requires Integral<T>
+T gcd(T a, T b) {
+    if( b == 0 ) return a;
+    else return gcd(b, a % b);
+}
+ \end{lstlisting}
+
+\begin{lstlisting}[caption={Simple requires\cite{concept-req}},label={code:smpl_requr},language=C++]
+template<typename T>
+concept Addable = requires (T a, T b) {
+    a + b;
+};
+\end{lstlisting}
+Ví dụ \ref{code:smpl_requr}, điều kiện định nghĩa concept Addable là các tham số đầu vào chung một kiểu dữ liệu, và ở kiểu dữ liệu này cần hỗ trợ phương thức \textbf{+}.
+
+\begin{lstlisting}[caption={Type requires\cite{concept-req}},label={code:type_requr},language=C++]
+template<typename T>
+concept TypeRequirement = requires {
+    typename T::value_type;
+    typename Other<T>;    
+};
+\end{lstlisting}
+
+Ở ví dụ \ref{code:type_requr}, ta sử dụng từ khoá \textbf{typename} để xem xét T có phải là đối tượng thoả mãn với các thành phần cần có hay không, trong trường hợp này ta xét qua \textbf{value\_type}. Ở đây \textbf{typename Other<T>} dùng để kiểm tra xem có thể khởi tạo được đối tượng \textbf{T} và trả về một typename hợp lệ hay không.
+
+\begin{lstlisting}[caption={Compound requires\cite{concept-req}},label={code:compound_requr},language=C++]
+template<typename T>                                     
+concept Equal = requires(T a, T b) {
+    { a == b } -> std::convertible_to<bool>;
+    { a != b } -> std::convertible_to<bool>;
+};
+\end{lstlisting}
+Về cơ bản, một compound requirement yêu cầu về định dạng dữ liệu trả về. Yêu cầu ở  ví dụ \ref{code:compound_requr} kết quả trả về cần có thể chuyển thành định dạng boolean để không xảy ra lỗi
+
+\begin{lstlisting}[caption={Nested requires\cite{concept-req}},label={code:nested_requr},language=C++]
+// template <typename T>                               // (1)
+// concept UnsignedIntegral = Integral<T> && !SignedIntegral<T>;
+
+template <typename T>                                  // (2)
+concept UnsignedIntegral = Integral<T> &&
+requires(T) {
+    requires !SignedIntegral<T>;
+};
+\end{lstlisting}
+Một nested requirement là các yêu cầu lồng ghép với nhau, ví dụ \ref{code:nested_requr} là một cách viết khác của ví dụ \ref{code:logic}, đoạn mã nguồn chú thích dòng (1), và thay đổi bằng các đoạn mã ở dòng (2). Nested requires thường được sử dụng trong các trường hợp không tồn tại các concept cần thiết cho biểu thức trước đó.
+
+\subsection{Trở lại với ví dụ \textit{duck-typing}}
+
+Ở ví dụ \ref{code:static}, hàm \textbf{writeMessage} hoạt động đa hình, nhưng không an toàn vì không có kiểm tra kiểu dữ liệu (type-check), song tiêu chí của \textbf{Metaprograming} là chương trình có thể tự kiểm tra lỗi trong compile-time. Và với C++ 20 bằng cách sử dụng \textbf{concepts} để định nghĩa và sử dụng khái niệm \textbf{MessageServer} (Dòng (1))
+
+Khái niệm MessageServer yêu cầu một đối tượng \textbf{t} kiểu \textbf{T} phải hỗ trợ phương thức \textbf{t.writeMessage}. Dòng (2) áp dụng \textbf{concept} trong \textbf{template writeMessage}
+
+\begin{lstlisting}[caption={Concept trong Duck-typing},label={code:concept},language=C++]
+// duckTypingWithConcept.cpp
+
+#include <chrono>
+#include <iostream>
+
+template <typename T>   // (1)
+concept MessageServer = requires(T t) {
+    t.writeMessage();
+};
+
+auto start = std::chrono::steady_clock::now();
+
+void writeElapsedTime(){
+    auto now = std::chrono::steady_clock::now();
+    std::chrono::duration<double> diff = now - start;
+  
+    std::cerr << diff.count() << " sec. elapsed: ";
+}
+
+struct MessageSeverity{
+  void writeMessage() const {
+      std::cerr << "unexpected" << '\n';
+  }
+};
+
+struct MessageInformation {
+  void writeMessage() const {              
+    std::cerr << "information" << '\n';
+  }
+};
+
+struct MessageWarning {
+  void writeMessage() const {               
+    std::cerr << "warning" << '\n';
+  }
+};
+
+struct MessageFatal: MessageSeverity{};     
+
+template <MessageServer T>   // (2)
+void writeMessage(T& messServer){                       
+	
+	writeElapsedTime();                                   
+	messServer.writeMessage();                            
+	
+}
+
+int main(){
+
+    std::cout << '\n';
+  
+    MessageInformation messInfo;
+    writeMessage(messInfo);
+    
+    MessageWarning messWarn;
+    writeMessage(messWarn);
+
+    MessageFatal messFatal;
+    writeMessage(messFatal);
+  
+    std::cout << '\n';
+
+}
+ 
+\end{lstlisting}

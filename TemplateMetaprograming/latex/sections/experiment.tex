@@ -1,0 +1,144 @@
+\section{Thực nghiệm}
+\textbf{Static table generation} là phương pháp dùng template meta programming để tính toán trước một bảng số liệu trong thời gian compile, từ đó truy vấn trong O(1) trong runtime. Ở phần này sẽ tập trung vào việc thực nghiệm để so sánh khả năng của template metapgrograming trong việc đưa việc tính toán vào compile-time trong một số trường hợp. Lưu ý cách cài đặt được mô tả trong phần này không phải cách cài đặt tốt nhất, nhưng sẽ đảm bảo tính công bằng về mặt thuật toán để so sánh giữa các kiểu lập trình.
+\subsection{Bài toán tính tổng}
+Xét bài toán lặp lại việc tính tổng từ 1 đến i và lưu vào bảng kết quả tại ô thứ i $table[i]=cumulativeSum(i)$, một cách hiển nhiên, có thể cài đặt đệ quy như sau.
+\begin{lstlisting}[caption={Thử nghiệm tính tổng},label={code:sum},language=C++]
+long long sum(int n)
+{
+    if(n == 0) return 0;
+    return n + sum(n-1);
+}
+// ... 
+int main(){
+    long long table[TABLE_SIZE] = {0};
+    for(int i = 0; i < TABLE_SIZE; i++)
+    {
+        table[i] = sum(i);
+    }
+}
+\end{lstlisting}
+và đối với template, cài đặt như sau 
+\begin{lstlisting}[caption={Thử nghiệm tính tổng với template},label={code:sum_template},language=C++]
+template <unsigned long int N>
+struct sum {
+	static constexpr unsigned long int value = N + sum<N - 1>::value;
+};
+
+template <>
+struct sum<0> {
+	static constexpr unsigned long int value = 0;
+};
+
+template<unsigned long int ...D>
+struct Helper<TABLE_SIZE, D...> {
+  static constexpr std::array<unsigned long int, TABLE_SIZE> table = { D... };
+};
+
+constexpr std::array<unsigned long int, TABLE_SIZE> table = Helper<>::table;
+enum  {
+  RES = table[TABLE_SIZE-1] // compile time use
+};
+
+int main() {
+    std::cout << RES << std::endl; 
+}
+\end{lstlisting}
+
+\noindent Bảng kết quả thời gian chạy với kích thước bảng lưu khác nhau
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|lrrrrr}
+\hline
+\multicolumn{1}{|l|}{size}        & \multicolumn{1}{r|}{100}   & \multicolumn{1}{r|}{500}   & \multicolumn{1}{r|}{1000}  & \multicolumn{1}{r|}{2000}  & \multicolumn{1}{r|}{3000}  \\ \hline
+\multicolumn{1}{|l|}{time normal (s)} & \multicolumn{1}{r|}{0,001} & \multicolumn{1}{r|}{0,002} & \multicolumn{1}{r|}{0,003} & \multicolumn{1}{r|}{0,008} & \multicolumn{1}{r|}{0,018} \\ \hline
+\multicolumn{1}{|l|}{time static (s)} & \multicolumn{1}{r|}{0,001} & \multicolumn{1}{r|}{0,001} & \multicolumn{1}{r|}{0,001} & \multicolumn{1}{r|}{0,001} & \multicolumn{1}{r|}{0,001} \\ \hline
+\end{tabular}
+\end{table}
+
+\noindent Trong đó có:
+\begin{itemize}
+    \item Size: kích thước của table
+    \item Time normal: thời gian chạy trên table được cài với mảng tỉnh, hàm sum là hàm đệ quy thông thường (tốn O(n))
+    \item Time static: thời gian chạy trên static table được cài bởi template, hàm sum cũng là metafunction thực thi trong complie time;
+\end{itemize}
+
+\textbf{Nhận xét: }kích thước table của normal table không bị giới hạn quá 3000, ngược lại kích thước table của static table sử dụng template metaprogramming với kiểu dữ liệu 4 byte bị giới hạn không quá 3000 (vượt quá sẽ bị lỗi out of memory allocated).
+Thời gian biên dịch của normal table không phụ thuộc vào kích thước table, ngược lại thời gian biên dịch của static table tăng theo kích thước table
+Thời gian thực thi của static table là hằng số
+\subsection{Phép nhân phân phối}
+Xét bài toán lặp lại việc tính tích nhân phân phối của 2 vector $A$ và $B$ với độ lớn từ $1$ đến $i$, trong đó $A[i]=B[i]=i$ và lưu kết quả tại ô đó. Tổng quát có $table[i]=Product(i)$, một cách hiển nhiên có thể cài đặt như sau.
+\begin{equation}
+    Product(n) = \sum_{i=0}^{n - 1} \sum_{j=0}^{n - 1} (A[i] \times B[j])
+\end{equation}
+
+\begin{lstlisting}[caption={Thử nghiệm tính nhân phân phối},label={code:dot},language=C++]
+long long Product(int n)
+{
+    long long res = 0;
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+            res += i * j;
+    }
+    return res;
+}
+int main(){
+    for(int i = 0; i < TABLE_SIZE; i++)
+    {
+        table[i] = Product(i);
+    }
+}
+\end{lstlisting}
+và đối với template, cài đặt như sau 
+\begin{lstlisting}[caption={Thử nghiệm tính nhân phân phối với template},label={code:dot_template},language=C++]
+
+constexpr unsigned long int TABLE_SIZE = 300;
+
+constexpr unsigned long int Product(unsigned long int n)
+{
+    unsigned long int res = 0;
+    for(unsigned long int i = 0; i < n; i++)
+    {
+        for(unsigned long int j = 0; j < n; j++)
+            res += i * j;
+    }
+    return res;
+}
+
+template<unsigned long int INDEX = 0, unsigned long int ...D>
+struct Helper : Helper<INDEX + 1, D..., Product(INDEX)> { };
+
+template<unsigned long int ...D>
+struct Helper<TABLE_SIZE, D...> {
+  static constexpr std::array<unsigned long int, TABLE_SIZE> table = { D... };
+};
+
+constexpr std::array<unsigned long int, TABLE_SIZE> table = Helper<>::table;
+
+enum  {
+  RES = table[TABLE_SIZE-1] // compile time use
+};
+int main(){
+    std::cout << RES << std::endl; 
+}
+\end{lstlisting}
+
+\noindent Bảng kết quả thời gian chạy với kích thước bảng lưu khác nha:
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|lrrrrr}
+\hline
+\multicolumn{1}{|l|}{size}        & \multicolumn{1}{r|}{10} & \multicolumn{1}{r|}{50} & \multicolumn{1}{r|}{100} & \multicolumn{1}{r|}{200} & \multicolumn{1}{r|}{300} \\ \hline
+\multicolumn{1}{|l|}{time normal (ms)} & \multicolumn{1}{r|}{1}  & \multicolumn{1}{r|}{2}  & \multicolumn{1}{r|}{2}   & \multicolumn{1}{r|}{6}   & \multicolumn{1}{r|}{18}  \\ \hline
+\multicolumn{1}{|l|}{time static (ms)} & \multicolumn{1}{r|}{1}  & \multicolumn{1}{r|}{1}  & \multicolumn{1}{r|}{1}   & \multicolumn{1}{r|}{1}   & \multicolumn{1}{r|}{1}   \\ \hline
+\end{tabular}
+\end{table}
+
+\noindent Trong đó có:
+\begin{itemize}
+    \item Size: kích thước của table
+    \item Time normal: thời gian chạy trên table được cài với mảng tỉnh, hàm Product dùng 2 vòng lặp lồng nhau (tốn $O(n^2)$)
+    \item Time static: thời gian chạy trên static table được cài bởi template, hàm Product cũng là meta function thực thi trong complie time;
+\end{itemize}
+
+\textbf{Nhận xét: }kích thước table của normal table không bị giới hạn quá 300, ngược lại kích thước table của static table sử dụng metapgramming với kiểu dữ liệu 4 byte bị giới hạn không quá 300.

@@ -1,0 +1,192 @@
+
+%--------------- Personalize your document here ---------------
+
+% \author{Phạm Minh Khôi} % Enter your name
+\newcommand{\studentone}{21120006 - Nguyễn Hải Chấn}
+\newcommand{\studenttwo}{21120028 - Nguyễn Phúc Tân}
+\newcommand{\studentthree}{21120314 - Hồ Lê Minh Quân}
+\newcommand{\studentfour}{18120134 - Nguyễn Hồ Thăng Long}
+
+\newcommand{\supervisorone}{ThS. Nguyễn Minh Huy} % Enter your supervisor's name
+% \newcommand{\supervisortwo}{PGS. TS. Trần Minh Triết}% Leave it empty or enter your second supervisor's name 
+\newcommand{\department}{KHOA CÔNG NGHỆ THÔNG TIN}
+% \newcommand{\exam}{TỔNG QUAN}
+
+\title{Lập trình Meta với C++ template} %Enter the title of your report 
+\date{Tháng 11, 2022} % insert a specific date	
+
+%--------------------------------------------------------------
+
+% This document was adapted from the
+% TEMPLATE FOR PHYS250 WORKSHEET created by Alastair McLean
+% URL: https://www.overleaf.com/latex/templates/phys250-worksheet-template/xxftvfhmwqdt
+
+% Jefferson Silveira
+% Email: 19jdls1@queensu.ca
+% Last update: 09-Jun-2021
+% If you have any questions or concerns, do not hesitate to contact me.
+%--------------------------------------------------------------
+
+\documentclass[a4paper,12pt]{article}
+\usepackage[left=30mm,top=30mm,right=30mm,bottom=30mm]{geometry}
+\usepackage{etoolbox} %required for cover page
+\usepackage{booktabs}
+\usepackage[usestackEOL]{stackengine}
+\usepackage[T1]{fontenc}
+% \usepackage[utf8]{inputenc}
+\usepackage[utf8]{vietnam}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage[capitalise]{cleveref}
+\usepackage{enumitem,kantlipsum}
+\usepackage{amssymb}
+\usepackage[square,numbers,sort]{natbib}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{listings}
+\usepackage{minted}
+\usemintedstyle{emacs}
+\usepackage{multirow}
+
+\renewcommand{\listingscaption}{Algorithm}
+\renewcommand{\listoflistingscaption}{List of Algorithms}
+
+
+
+\bibliographystyle{unsrtnat}
+
+\hypersetup{
+    colorlinks,
+    linkcolor={black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+\linespread{1}
+
+\newtheorem{theorem}{Theorem}[section]
+\graphicspath{{figures/}}	
+
+%----------------------------------TITLE PAGE -----------------------------------
+\makeatletter
+\def\maketitle{
+  \begin{center}\leavevmode
+       \normalfont
+       \includegraphics[width=0.35\columnwidth]{template/hcmus_logo.jpeg}
+       \vskip 0.5cm   
+       \textsc{\large \department}\\
+       \vskip 1.5cm
+       \rule{\linewidth}{0.2 mm} \\
+       {\large \exam}\\[1 cm]
+       {\huge \bfseries \@title \par}
+       \vspace{1cm}
+	\rule{\linewidth}{0.2 mm} \\[1.5 cm]
+	 
+	\begin{minipage}[t]{0.55\textwidth}
+		\begin{flushleft} \large
+			\emph{Sinh viên thực hiện:}\\
+			\studentone\\ 
+			\studenttwo\\
+			\studentthree\\
+			\studentfour\\
+		\end{flushleft}
+	\end{minipage}
+	\begin{minipage}[t]{0.42\textwidth}
+	    \begin{flushright} \large
+			\ifdefempty{\supervisortwo}{\emph{Supervisor:\\}}{\emph{Giảng viên hướng dẫn:\\}}
+			\supervisorone\\
+			\ifdefempty{\supervisortwo}{}{\supervisortwo\\}
+		\end{flushright}
+	\end{minipage}
+	\vfill
+	{\Large \@date\par}
+   \end{center}
+   %\vfill
+   %\null
+   \cleardoublepage
+  }
+\makeatother
+
+
+%-------------------------------- CODE FORMATING ----------------------------------
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+%% abstract environment
+
+\newenvironment{Abstract}{
+    \begin{center}
+    \begin{quote}\itshape
+    }{
+    \end{quote}
+    \end{center}
+}
+%-------------------------------- ENDTITLE PAGE ----------------------------------
+
+\begin{document}
+\maketitle
+\input{abstract.tex} \clearpage
+\tableofcontents
+\newpage
+%\listoffigures
+%\newpage
+%\listoftables
+%\newpage
+%\listofalgorithms % List of algorithms in pseudocode format
+%\newpage
+%\listoflistings % List of algorithms in code format
+%\newpage
+
+
+\pagenumbering{arabic}% Arabic page numbers (and reset to 1)
+
+% This is how you can organize your document
+% \input{sections/introduction}
+\input{sections/metafuncs.tex}
+\input{sections/polymorphism.tex}
+\input{sections/concepts.tex}
+\input{sections/experiment.tex}
+\input{sections/conclusion}
+
+
+
+
+%If you came here because you want your references in a new page, uncomment the following line
+
+\clearpage % If you want the references in a separate page
+\bibliography{bibliography}
+
+\clearpage % If you want the appendix in a separate page
+\appendix
+\input{sections/appendix}
+
+\end{document}
