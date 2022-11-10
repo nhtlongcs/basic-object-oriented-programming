@@ -54,7 +54,7 @@ void example()
 {
     // Working with dynamic array of fractions from file
 
-    // Reading input: fractions.txt
+    // Reading input: data/data.txt
     // Expecting to have 5 fractions
 
     // Found 4 fractions: 1 1/2, 2, 1 1/6, 15/17

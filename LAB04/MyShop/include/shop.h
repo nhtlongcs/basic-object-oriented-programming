@@ -70,7 +70,7 @@ public:
         cout << "Found " << result.size() << " products" << endl;
         for (int i = 0; i < result.size(); i++)
         {
-            cout << product_manager.getProduct(result[i]).toString() << endl;
+            cout << '[' << i << "] :" << product_manager.getProduct(result[i]).toString() << endl;
         }
     }
     void menu()

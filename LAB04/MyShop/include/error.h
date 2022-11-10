@@ -6,8 +6,7 @@ enum ErrorCode
     OK,
     EmptyInput,
     InvalidFormat,
-    OutOfRange,
-    DivideByZero
+    FileNotFound,
 };
 // singleton error class to be used in the whole project
 class Error
@@ -36,10 +35,8 @@ public:
             return "Empty input";
         case ErrorCode::InvalidFormat:
             return "Invalid format";
-        case ErrorCode::OutOfRange:
-            return "Out of range";
-        case ErrorCode::DivideByZero:
-            return "Denominator cannot be zero";
+        case ErrorCode::FileNotFound:
+            return "File not found";
         default:
             return "Unknown error";
         }

@@ -1,45 +1,36 @@
-## 1. Fraction Deserialization
 
-### Initial information
+## FractionDeserialization
 
-- Name your project: **FractionDeserialization**
+To compile and run the program, type the following commands:
 
-### Requirements
+```bash
+$ cd LAB03/FractionDeserialization
+$ make
 
-- [ ]  1. Print out the introduction for the program: **Fraction deserialization**
-- [ ]  2. Read all the fractions stored inside the file data.txt. You can use your own format, or you can use the suggested below file
 
-**The first line contains the number of fractions inside the file**
+Creating directories
+make[1]: Entering directory '/home/nhtlong/oop/course/LAB03/FractionDeserialization'
+Compiling: src/fraction.cpp -> build/fraction.o
+g++  -std=c++11 -Wall -Wextra -g -I include/ -I /usr/local/include -MP -MMD -c src/fraction.cpp -o build/fraction.o
+Compiling: src/main.cpp -> build/main.o
+g++  -std=c++11 -Wall -Wextra -g -I include/ -I /usr/local/include -MP -MMD -c src/main.cpp -o build/main.o
+Linking: build/bin/main
+g++ build/fraction.o build/main.o -o build/bin/main 
+Making symlink: main -> build/bin/main
+make[1]: Leaving directory '/home/nhtlong/oop/course/LAB03/FractionDeserialization'
 
-```cpp
-5
-3/7
-11/2
-9/6
-25/1
-7/2
-```
-
-- [ ]  3. Print out all the fractions that you have read from the file
-- [ ]  4. Print out the sum of all fractions in its lowest term
-
-### Example output (happy path)
-
-```cpp
-Fraction deserialization
+$ ./main
 
 Reading fractions from data.txt file...
-Found 5 fractions: 3/7, 5 1/2, 1 1/2, 25, 3 1/2
-The sum of all fractions is: 35 13/14
+Error: Invalid format
+Error: Invalid format
+Found 3 fractions: 3/7, 1 3/6, 3 1/2, 
+The sum of all fractions is: 5 3/7
 ```
 
-### Example output 1 (unhappy path)
+data.txt file contains the following data:
 
-Example input
-
-This file contains some invalid lines, we can skip it.
-
-```cpp
+```bash
 5
 3/7
 11/2invalid data
@@ -48,56 +39,29 @@ This file contains some invalid lines, we can skip it.
 7/2
 ```
 
-Example output
+## PointSerialization
 
-```cpp
-Fraction deserialization
+To compile and run the program, type the following commands:
 
-Reading fractions from data.txt file...
-Found 3 fractions: 3/7, 1 1/2, 3 1/2
-The sum of all fractions is: 5 3/7
+```bash
+$ cd LAB03/PointSerialization
+$ make
+Creating directories
+make[1]: Entering directory '/home/nhtlong/oop/course/LAB03/PointSerialization'
+Compiling: src/main.cpp -> build/main.o
+g++  -std=c++11 -Wall -Wextra -g -I include/ -I /usr/local/include -MP -MMD -c src/main.cpp -o build/main.o
+...
+Linking: build/bin/main
+g++ build/main.o build/point.o -o build/bin/main 
+Making symlink: main -> build/bin/main
+make[1]: Leaving directory '/home/nhtlong/oop/course/LAB03/PointSerialization'
+
+$ ./main
 ```
 
-### Example output 2 (unhappy path)
+The program will create a file named `output.txt` containing the following data:
 
-```cpp
-Fraction serialization & deserialization
-
-Reading fractions from data.txt file...
-File not found. 
-Exiting the program.
+```bash
+1/2
+3/4
 ```
-
-### Hints
-
-1. Check if a file exists
-
-```cpp
-inline bool exists(const std::string& name) {
-    ifstream f(name.c_str());
-    return f.good();
-}
-```
-
-Further reading to find out more methods of checking if a file exists and what is the fastest method
-
-[Fastest way to check if a file exists using standard C++/C++11,14,17/C?](https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exists-using-standard-c-c11-14-17-c)
-
-2. Read all lines of a text file
-
-```cpp
-#include <fstream>
-
-ifstream reader;
-reader.open("test.txt", ios::in);
-
-while (!reader.eof()) {
-    string buffer;
-    getline(reader, buffer);
-    cout << buffer << endl;
-}
-
-reader.close();
-```
-
-3. Write all objects to a text file

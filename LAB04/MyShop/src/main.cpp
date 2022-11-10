@@ -13,7 +13,7 @@ void example()
     Logger *e = &Logger::getInstance();
     e->debug();
     Shop shop = Shop(category_path, product_path);
-    shop.menu();
+    shop.run();
 }
 int main()
 {

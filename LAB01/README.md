@@ -1,142 +1,84 @@
-# Lab 01 - Old techniques reminder
+## IntegersFromKeyboard
 
-<aside>
+To compile and run the program, type the following commands:
 
-🎯 Problems
-1. Looping until getting a valid number from the keyboard
-2. Returning multiple values from a function
-3. Generate randomly an integer
-3. Save all numbers into a dynamic array (vector)
-4. Using function pointer for reducing an array
+```bash
+$ cd LAB01/IntegersFromKeyboard
+$ make
 
-</aside>
+Creating directories
+make[1]: Entering directory '/home/nhtlong/oop/course/LAB01/IntegersFromKeyboard'
+Compiling: src/IntegersFromKeyboard.cpp -> build/IntegersFromKeyboard.o
+g++  -std=c++11 -Wall -Wextra -g -I include/ -I /usr/local/include -MP -MMD -c src/IntegersFromKeyboard.cpp -o build/IntegersFromKeyboard.o
+...
+Linking: build/bin/main
+g++ build/IntegersFromKeyboard.o build/main.o -o build/bin/main 
+Making symlink: main -> build/bin/main
+make[1]: Leaving directory '/home/nhtlong/oop/course/LAB01/IntegersFromKeyboard'
 
-# A. Exercises
+$ ./main
 
-## 1. Working with integer arrays from the keyboard
-
-### Initial information
-
-- Name your project: **IntegersFromKeyboard**
-
-### Requirements
-
-- [ ]  1. Print out the instructions for the program: **Working with integer arrays from the keyboard**
-- [ ]  2. Enter an integer n in the range of [**5, 10**].
-- [ ]  3. Enter n integers, each integer in the range of [**1, 100**] and save them into a vector
-- [ ]  4. Find all odd numbers, all even numbers, all palindromic numbers, all prime numbers
-
-### Example output (happy path)
-
-```
-Working with integer arrays from the keyboard.
-
-Please enter an integer in the range of [5, 10]: 6
-
-Please enter 6 integer(s), each in the range of [1, 100]:
+Working with integer arrays from the keyboard
+Please enter an integer in the range of [5, 10]: 5
+Please enter 5 integer(s), each in the range of [1, 100]: 
 The [0] integer: 12
-The [1] integer: 4
-The [2] integer: 77
-****The [3] integer: 26
-The [4] integer: 33
-The [5] integer: 99
 
-You have entered 6 integer(s): 12, 4, 77, 26, 33, 99
-Found 3 odd number(s): 77, 33, 99
-Found 3 even number(s): 12, 4, 26
-Found 4 palindromic number(s): 4, 77, 33, 99
-Found 1 prime number(s): 4
+The [1] integer: 1000
+Error: Out of range
+The [1] integer: 0   
+Error: Out of range
+The [1] integer: 12
+
+The [2] integer: 3
+
+The [3] integer: 1mn1
+Error: Invalid format
+The [3] integer: 5
+
+The [4] integer: 10
+
+You have entered 5 integer(s):
+12 12 3 5 10 
+Found 2 odd numbers: 
+3 5 
+Found 3 even numbers: 
+12 12 10 
+Found 2 palindrom numbers: 
+3 5 
+Found 2 prime numbers: 
+3 5 
 ```
 
-### Example output (unhappy path)
+## RandomlyGeneratedIntegers 
 
-```
-Working with integer arrays from the keyboard.
+To compile and run the program, type the following commands:
 
-Please enter an integer in the range of [5, 10]: (Press enter)
-**Error: Input string cannot be empty.**
 
-Please enter an integer in the range of [5, 10]: allstring
-**Error: Invalid input format.**
+```bash
+$ cd LAB01/RandomlyGeneratedIntegers
+$ make
 
-Please enter an integer in the range of [5, 10]: 20
-**Error: The integer must be in the range of [5, 10]**
-
-Please enter an integer in the range of [5, 10]: 6 
-*.... (continue as the happy path above)*
-```
-
-### Improvement - Enhanced output
-
-Rather than
-
-```
+Creating directories
+make[1]: Entering directory '/home/nhtlong/oop/course/LAB01/RandomlyGeneratedIntegers'
+Compiling: src/RandomlyGeneratedIntegers.cpp -> build/RandomlyGeneratedIntegers.o
+g++  -std=c++11 -Wall -Wextra -g -I include/ -I /usr/local/include -MP -MMD -c src/RandomlyGeneratedIntegers.cpp -o build/RandomlyGeneratedIntegers.o
 ...
-You have entered 6 integer(s): 12, 4, 77, 26, 33, 99
-Found 3 odd number(s): 77, 33, 99
-Found 3 even number(s): 12, 4, 26
-Found 4 palindromic number(s): 4, 77, 33, 99
-Found 1 prime number(s): 4
+Linking: build/bin/main
+g++ build/main.o build/RandomlyGeneratedIntegers.o -o build/bin/main 
+Making symlink: main -> build/bin/main
+make[1]: Leaving directory '/home/nhtlong/oop/course/LAB01/RandomlyGeneratedIntegers'
+
+$ ./main 
+
+Working with randomly generated integers 
+Generating 8 integer(s):
+68 20 24 98 30 33 81 88 
+Found 2 odd numbers: 
+33 81 
+Found 6 even numbers: 
+68 20 24 98 30 88 
+Found 2 palindrom numbers: 
+33 88 
+Found 1 square numbers: 
+81 
 ```
-
-Can you generate this output instead?
-
-```
-...
-You have entered **6 integers**: 12, 4, 77, 26, 33, 99
-Found **3 odd numbers**: 77, 33, 99
-Found **3 even numbers**: 12, 4, 26
-Found **4 palindromic numbers**: 4, 77, 33, 99
-Found **1 prime number**: 4
-```
-
-Hint: add a helper function to decide 
-
-## 2. Generating integers randomly
-
-### Initial information
-
-- Name your project: **RandomlyGeneratedIntegers**
-
-### Requirements
-
-- [ ]  1. Print out the instructions for the program: **Working with randomly generated integers**
-- [ ]  2. Generate randomly an integer n in the range of [**5, 10**].
-- [ ]  3. Generate randomly n integers, each integer in the range of [**10, 100**], and save them into a vector
-- [ ]  4. Find all odd numbers, all even numbers, all palindromic numbers, all square numbers
-
-### Example output (happy path)
-
-```
-**Working with randomly generated integers** 
-
-Generating 6 integers: 12, 4, 77, 26, 33, 99
-Found **3 odd numbers**: 77, 33, 99
-Found **3 even numbers**: 12, 4, 26
-Found **4 palindromic numbers**: 4, 77, 33, 99
-Found **1 prime number**: 4
-```
-
-# B. Submission instructions
-
-If you write code using **onlinegdb.com**
-
-- Make sure you have logged in
-- Make sure you have saved your project and have given it a name
-- Click the **Share** button to get the link to your project
-- Put this link into a file in the format of {YourStudentID}.**txt** and submit back this text file.
-
-If you write code using an **IDE** (Visual Studio, Visual Studio Code, or any IDE)
-
-- Compress all your source code in the format of {YourStudentID}.**rar** or {YourStudentID}.**zip** and submit back this file.
-
-
-# D.Frequently asked questions (FAQ)
-
-1. Should we split files into .h and .cpp files?
-
-You should. But it is not a must.
-
-2. Should we delete intermediate files before submitting them to Moodle?
-
-You should. But it is not a must.

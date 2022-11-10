@@ -29,6 +29,10 @@ vector<Fraction> parseFractionFromFile(const std::string &filename)
         return fractions_ls;
     }
     std::ifstream file(filename);
+    std::string line; 
+    std::getline(file, line);
+    // convert string to int
+    int n = std::stoi(line);
     for (std::string line; std::getline(file, line);)
     {
         Fraction item = Fraction::parse_safe(line);

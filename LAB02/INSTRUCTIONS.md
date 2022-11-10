@@ -1,7 +1,6 @@
+## Return result with error message 
 
-### Hints
-
-1. To get a fraction from the keyboard you can create a function named parse().
+To get a fraction from the keyboard you can create a function named parse().
 
 You could throw an exception inside this function or you can use the suggested version below using error codes and messages:
 
@@ -41,6 +40,8 @@ Fraction::ParseErrorCode::EmptyInput
 Fraction::ParseErrorCode::InvalidInputFormat
 ```
 
-2. The regular expression for fraction is “\d+\/\d+”
+## Regular expression
 
-In C++, it should be "\\d+\\/\\d+”
+The regular expression for fraction is `\d+\/\d+`
+
+In C++, it should be `\\d+\\/\\d+`

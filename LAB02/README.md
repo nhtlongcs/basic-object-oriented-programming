@@ -1,314 +1,64 @@
-# Lab 02 - Class & Object Basic
+## FractionsFromKeyboard
 
-<aside>
+To compile and run the program, type the following commands:
 
-🎯 Problems
-1. Where is an object created and destroyed? What is heap & stack?
-2. How to handle destruction automatically with a smart pointer?
-3. How to create only one instance of a class using Singleton?
-4. Where do we store the state of the program?
-5. How to display objects using converters?
+```bash
+$ cd LAB02/FractionsFromKeyboard
+$ make
 
-</aside>
+Creating directories
+make[1]: Entering directory '/home/nhtlong/oop/course/LAB02/FractionsFromKeyboard'
+Compiling: src/fraction.cpp -> build/fraction.o
+g++  -std=c++11 -Wall -Wextra -g -I include/ -I /usr/local/include -MP -MMD -c src/fraction.cpp -o build/fraction.o
+...
+Linking: build/bin/main
+g++ build/fraction.o build/main.o -o build/bin/main 
+Making symlink: main -> build/bin/main
+make[1]: Leaving directory '/home/nhtlong/oop/course/LAB02/FractionsFromKeyboard'
 
-# A. Exercises
+$ ./main
 
-## 1. Random fraction generator
+Working with fractions from the keyboard
+Please enter 5 fractions.
+Fraction [0]: 
+Error: Empty input
+Fraction [0]: 1/2
 
-### Initial information
+Fraction [1]: 10/0
+Error: Denominator cannot be zero
+Fraction [1]: 100/10
 
-- Name your project: **RandomFractionGenerator**
+Fraction [2]: 1/2
 
-### Requirements
+Fraction [3]: 1/1
 
-- [ ]  1. Print out the instructions for the program: **Random fraction generator**
-- [ ]  2. Generate randomly an integer n in the range of [**5, 10**].
-- [ ]  3. Generate randomly n fractions (each numerator and denominator of the fraction should be in the range of [**10, 100**]), and save them into a vector
-- [ ]  4. Print out all the generated fractions in their normal form (no reduction)
-- [ ]  5. Print out all the generated fractions in their lowest term
-    - 5/1 ⇒ 5
-    - 9/6 ⇒ 1 1/2
-    - 4/6 ⇒ 2/3
-- [ ]  6. Print out all the generated fractions in their decimal form (with the precision of 3 numbers after the decimal point)
-- [ ]  7. Print out all the generated fractions in their percentage form (with the precision of 2 numbers after the decimal point)
-    
-### Example output
-    
+Fraction [4]: 1/1
 
-```
-**Random fraction generator** 
-
-Generating 6 fractions: 4/2, 14/4, 8/10, 7/2, 1/3, 2/4
-Fractions in their lowest term: 2, 3 1/2, 4/5, 1/3, 1/2
-Fractions in their decimal form: 2.000, 3.500, 0.800, 0.333, 0.500
-Fractions in their percentage form: 200.00%, 3500.00%, 33.33%, 50.00% 
+The sum of all fractions is: 13 
 ```
 
-### Hints
+## RandomFractionGenerator
 
-1. To generate random fractions, you could create a business class for that named **RandomFractionGenerator**
+To compile and run the program, type the following commands:
 
-```cpp
-class RandomFractionGenerator {
-public:
-	Fraction next();
-	Fraction next(int left, int right); // Numerator & denominator in [left, right] 
-};
+```bash
+$ cd LAB02/RandomFractionGenerator
+$ make
+
+Creating directories
+make[1]: Entering directory '/home/nhtlong/oop/course/LAB02/RandomFractionGenerator'
+Compiling: src/fraction.cpp -> build/fraction.o
+g++  -std=c++11 -Wall -Wextra -g -I include/ -I /usr/local/include -MP -MMD -c src/fraction.cpp -o build/fraction.o
+...
+Linking: build/bin/main
+g++ build/fraction.o build/main.o -o build/bin/main 
+Making symlink: main -> build/bin/main
+make[1]: Leaving directory '/home/nhtlong/oop/course/LAB02/RandomFractionGenerator'
+
+$ ./main
+
+Generating 6 fractions: 5 2/12, 2 2/6, 8 2/11, 14 2/7, 4 2/8, 13/14, 
+Fractions in their lowest term: 5 1/6, 2 1/3, 8 2/11, 14 2/7, 4 1/4, 13/14, 
+Fractions in their decimal form: 5.16667, 2.33333, 8.18182, 14.2857, 4.25, 0.928571, 
+Fractions in their percentage form: 516.666667%, 233.333333%, 818.181818%, 1428.571429%, 425.000000%, 92.857143%, 
 ```
-
-Basic usage
-
-```cpp
-RandomFractionGenerator rfg;
-Fraction f = rfg.next(); 
-Fraction f = rfg.next(10, 100);
-```
-
-2. To generate random integers, you could create a business class for that named **RandomIntegerGenerator**
-
-```cpp
-class RandomIntegerGenerator {
-public:
-	RandomIntegerGenerator(); // Do seeding here
-public:
-	int next(); // Integer in [0, 65535]
-	int next(int ceiling); // Integer in [0, ceiling)
-	int next(int left, int right); // Integer in [left, right]
-};
-```
-
-Basic usage
-
-```cpp
-RandomIntegerGenerator rng;
-int number = rng.next();
-int maximum = rng.next(100); 
-int inside = rng.next(10, 90);
-```
-
-Most of the time you will want this Random Integer Generator class to have only one instance throughout the operation of the program. In this case, turn it into Singleton
-
-```cpp
-class RandomIntegerGenerator {
-public:
-	// Only use inline with C++17
-	**inline static RandomIntegerGenerator* _instance = NULL;**
-
-private:
-	// The constructor is hidden
-	RandomIntegerGenerator() {
-		srand(time(NULL));
-	}
-
-public:
-	**static RandomIntegerGenerator* instance() {**
-		if (_instance == NULL) {
-			_instance = new RandomIntegerGenerator();
-		}
-
-		return _instance;
-	}
-public:
-	int next();
-	int next(int);
-	int next(int, int);
-};
-```
-
-Usage
-
-```cpp
-int number = RandomIntegerGenerator::instance()->next();
-int maximum = RandomIntegerGenerator::instance()->next(100); 
-int inside = RandomIntegerGenerator::instance()->next(10, 90);
-```
-
-Hint: The above implementation leaves a memory leak with the _instance pointer, this could be improved by using a smart pointer.
-
-3. To turn a fraction into a string, you could write toString function (**do not abuse this function**)
-
-```cpp
-class Fraction {
-public:
-	string toString() {
-		// Do not write
-			// return _num + "/"+ _den
-		// because the below codes will be better for debugging
-		string result = _num + "/" + _den;
-		return result;
-	}
-};
-```
-
-To concatenate a lot of substrings, it is better to use **stringstream**
-
-```cpp
-#include <sstream>
-using namespace std;
-
-class Fraction {
-public:
-	string toString() {
-		stringstream builder; 
-		builder << _num << "/" << _den;
-	
-		// Do not write
-		// return builder.str() 
-		// because the below codes will be better for debugging
-		string result = builder.str();
-		return result; 
-	}
-};
-```
-
-4. To find the greatest common divisor of two integers, you could write a static helper function inside an Integer class
-
- 
-
-```cpp
-class Integer {
-public:
-	static int gcd(int a, int b);
-};
-```
-
-Usage:
-
-```cpp
-int common = Integer::gcd(a, b);
-```
-
-5. To convert a fraction into its display form, rather than using the toString function you could write a converter instead:
-
-```cpp
-class FractionToDecimalConverter {
-public:
-	**string convert(Fraction f);** 
-};
-```
-
-To turn this into a more general design, please consider this design for the converter class (inspired from C# WPF **IValueConverter**)
-
-```cpp
-**typedef void* Object;**
-
-class FractionToDecimalConverter {
-public:
-	Object convert(Object o, Object arguments); 
-	Object convertBack(Object o, Object arguments);
-};
-
-class FractionToLowestTermConverter {
-public:
-	Object convert(Object o, Object args); 
-	Object convertBack(Object o, Object arguments);
-};
-
-class FractionToPercentageConverter {
-public:
-	Object convert(Object o, Object args); 
-	Object convertBack(Object o, Object arguments);
-};
-```
-
-**6. State of the screen**
-
-The array of fractions is our main screen state. Normally we could have something like this
-
-```cpp
-void main() {
-	vector<Fraction> fractions;
-
-}
-```
-
-We could put it inside a global struct like this
-
-```cpp
-struct {
-	vector<Fraction> fractions;
-} state;
-
-void main() {
-	// access the fractions like this
-	for(int i = 0; i < state.fractions.size(); ++i) {
-	}
-}
-```
-
-## 2. Working with fractions from the keyboard
-
-### Initial information
-
-- Name your project: **FractionsFromKeyboard**
-
-### Requirements
-
-- [ ]  1. Print out the instructions for the program: **Working with fractions from the keyboard**
-- [ ]  2. Generate randomly an integer n in the range of [**5, 10**].
-- [ ]  3. Enter n fractions from the keyboard, each numerator and denominator in the range of [**1, 100**]
-- [ ]  4. Print out the sum of all the fractions in it loswest term.
-
-### Example output (happy path)
-
-```cpp
-**Working with fractions from the keyboard**
-
-Please enter 6 fractions.
-Fraction [0]: 1/8
-Fraction [1]: 2/8
-Fraction [2]: 3/8
-Fraction [3]: 4/8
-Fraction [4]: 5/8
-Fraction [5]: 6/8
-
-The sum of all fractions is: 2 5/8
-```
-
-### Example output (unhappy path)
-
-```cpp
-**Working with fractions from the keyboard**
-
-Please enter 6 fractions.
-Fraction [0]: (press enter to get empty string)
-**Error: Input cannot be empty.**
-
-Fraction [0]: somestring
-**Error: Invalid input format.** 
-
-Fraction [0]: 12/tesing
-**Error: Invalid input format.**
-
-Fraction [0]: 12/0
-**Error: Denominator cannot be zero.**
-
-Fraction [0]: 200/300
-**Error: The numerator and denominator should be in the range of [1, 100]**
-
-Fraction [0]: 1/8
-Fraction [1]: 2/8
-Fraction [2]: 3/8
-Fraction [3]: 4/8
-Fraction [4]: 5/8
-Fraction [5]: 6/8
-
-The sum of all entered fractions is: 2 5/8
-```
-
-# B. Submission instructions
-
-If you write code using **onlinegdb.com**
-
-- Make sure you have logged in
-- Make sure you have saved your project and have given it a name
-- Click the **Share** button to get the link to your project
-- Put this link into a file in the format of {YourStudentID}.**txt** and submit back this text file.
-
-If you write code using an **IDE** (Visual Studio, Visual Studio Code, or any IDE)
-
-- Compress all your source code in the format of {YourStudentID}.**rar** or {YourStudentID}.**zip** and submit back this file.
-
-# C. Frequently asked questions
-
-0 questions here. Feel free to ask your instructors for hints on solving the problems.
