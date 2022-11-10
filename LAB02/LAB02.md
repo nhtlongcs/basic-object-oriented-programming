@@ -295,20 +295,3 @@ Fraction [5]: 6/8
 
 The sum of all entered fractions is: 2 5/8
 ```
-
-# B. Submission instructions
-
-If you write code using **onlinegdb.com**
-
-- Make sure you have logged in
-- Make sure you have saved your project and have given it a name
-- Click the **Share** button to get the link to your project
-- Put this link into a file in the format of {YourStudentID}.**txt** and submit back this text file.
-
-If you write code using an **IDE** (Visual Studio, Visual Studio Code, or any IDE)
-
-- Compress all your source code in the format of {YourStudentID}.**rar** or {YourStudentID}.**zip** and submit back this file.
-
-# C. Frequently asked questions
-
-0 questions here. Feel free to ask your instructors for hints on solving the problems.
