@@ -715,18 +715,7 @@ có thể **không tương thích với nhiều trình biên dịch**.
 Tóm tắt và thảo luận
 --------------------
 
-**Tổng kết**, qua quá trình nghiên cứu, nhóm đã tìm hiểu về công dụng
+**Tổng kết**, qua quá trình nghiên cứu, chúng ta đã tìm hiểu về công dụng
 của Metaprograming sử dụng **Template trong C++** và các ý tưởng sơ
 khai. Trọng điểm nhất là việc tham số hoá kiểu dữ liệu và các nguyên tắc
-thiết kế. Nhóm đã đưa ra các ví dụ, triển khai và phát triển. Các thực
-nghiệm và dẫn chứng thiết thực về tốc độ và hiệu năng cũng được khảo sát
-và trình bày.
-
-Song vẫn còn nhiều vấn đề tồn đọng và các trường hợp sử dụng kết hợp
-linh hoạt các thành phần trong metaprograming chưa được đề cập đến. Hay
-về các nội dung đề cập, nhóm chỉ tiến hành giới thiệu về **polymorphic
-behavior** của templates chứ không đề cập về static polymorphism. Điều
-này có thể đề cập đến **CRTP**. **CRTP** là viết tắt của **Curily
-Recurring Template Pattern** và có nghĩa là một kỹ thuật trong C ++,
-trong đó kế thừa một lớp **Derived** từ một lớp mẫu **Based** và
-**Derived** sử dụng **Base** như một tham số mẫu.
+thiết kế. 
