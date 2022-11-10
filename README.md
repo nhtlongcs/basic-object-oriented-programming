@@ -4,7 +4,7 @@ This repository contains a collection of educational material and exercises for 
 
 > The author of course material is [Msc. Nguyen Minh Huy](mailto:nmhuy@fit.hcmus.edu.vn?subject=[OOP]%20Your%20Title), lab exercises are being used in the course belong to the [Msc. Tran Duy Quang](mailto:tdquang@fit.hcmus.edu.vn?subject=[OOP]%20Your%20Title), both are Lecturers of Software Engineering at the [University of Science, HCMC](https://www.fit.hcmus.edu.vn/).
 
-## 1. Syllabus
+## Syllabus
 
 - [Week 01: Course overview](01_OVERVIEW/lecture_notes/README.md)
     - Coding convention 
@@ -47,7 +47,7 @@ This repository contains a collection of educational material and exercises for 
     - Compile-time programming
     - Concepts
 
-## 2. Environment
+## Environment
 *Requirement:* You need to have a C++ compiler installed on your computer. You can use any compiler you like, but the following instructions are for the GNU C++ compiler (g++). If you are using a Linux computer, you can install the g++ compiler using the following command. 
 
 ```bash
