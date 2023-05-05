@@ -1,0 +1,1 @@
+ID=1, Name=ZTE Prime Smart Watch, Price=1985000
