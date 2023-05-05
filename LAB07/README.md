@@ -1,17 +1,23 @@
 # Lab 07 - Working with list of objects
 
+# How to run the code
+
+```bash
+$ make 
+$ ./main
+```
 # Requirements
 
-- [ ]  Generate an integer n in the range of [5, 10]
-- [ ]  Generate n products and print out the list to the screen. Each product should have an id (string), a name (string), and a price (int).
+- [x]  Generate an integer n in the range of [5, 10]
+- [x]  Generate n products and print out the list to the screen. Each product should have an id (string), a name (string), and a price (int).
+
+The id should not be duplicated. You should use a class for generating product’s id. 
     
-    The id should not be duplicated. You should use a class for generating product’s id. 
-    
-- [ ]  Save n products into n text files, each text file contains all the information of a product.
+- [x]  Save n products into n text files, each text file contains all the information of a product.
 
 Theses text file should be put inside a folder named “**Product**”
 
-- [ ]  Read back all your stored products from text files and print out the list to the console
+- [x]  Read back all your stored products from text files and print out the list to the console
 
 For examples, if you generate 3 products, you should store them inside **3 different txt files** inside the folder **Product** using the suggested format like this:
 
@@ -145,5 +151,3 @@ public:
     Product parse(string data);
 };
 ```
-
-## Super demo for inspiring
