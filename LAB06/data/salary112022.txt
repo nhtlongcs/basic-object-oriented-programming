@@ -1,0 +1,6 @@
+5
+Employee ID=1, Name=Nguyen Huu Chanh, WorkDay=15, Products=200
+Employee ID=3, Name=Tran Thai Tuan, WorkDay=13, Products=700
+Employee ID=21, Name=Nguyen Minh Hanh, WorkDay=12, Products=770
+Employee ID=33, Name=Tran Khanh Linh, WorkDay=18, Products=900
+Employee ID=36, Name=Dang Dinh Long, WorkDay=14, Products=650
