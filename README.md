@@ -1,10 +1,12 @@
 ## Basic-Object-Oriented-Programming
 
 This repository contains a collection of educational material and exercises for learning basic object-oriented programming in C++. The material is intended for students who have some experience with programming in C++, but who have not yet learned object-oriented programming. See the [course website]() for more information. This can be used to teach basic object-oriented programming concepts. The material is designed to be used in a classroom setting, but can also be used for self-study.
-
 > The author of course material is [Msc. Nguyen Minh Huy](mailto:nmhuy@fit.hcmus.edu.vn?subject=[OOP]%20Your%20Title), lab exercises are being used in the course belong to the [Msc. Tran Duy Quang](mailto:tdquang@fit.hcmus.edu.vn?subject=[OOP]%20Your%20Title), both are Lecturers of Software Engineering at the [University of Science, HCMC](https://www.fit.hcmus.edu.vn/).
 
+
 ## Syllabus
+
+>*Disclaimer: This material is provided as-is. The author is not responsible for any errors or omissions in the content of this material. The author does not guarantee that the material is complete, correct, and/or up-to-date. Be responsible with your learning*.
 
 - [Week 01: Course overview](01_OVERVIEW/lecture_notes/README.md)
     - Coding convention 
